@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LimPeira | Pitch Deck para Investidores</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --primary: #0A369D;
+            --primary-dark: #062163;
+            --primary-light: #DBEAFE;
+            --green: #0B6E31;
+            --green-light: #DCFCE7;
+            --green-mint: #86EFAC;
+            --accent: #F59E0B;
+            --accent-light: #FEF3C7;
+            --danger: #DC2626;
+            --bg: #F8FAFC;
+            --white: #FFFFFF;
+            --ink: #0F172A;
+            --muted: #475569;
+            --border-solid: 2px solid #0F172A;
+            --shadow-solid: 4px 4px 0px #0F172A;
+            --radius: 18px;
+            --transition: 0.35s cubic-bezier(.2, .8, .2, 1);
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: "Hanken Grotesk", sans-serif;
+        }
+
+        button { font: inherit; }
+
+        .presentation {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: 
+                radial-gradient(circle at 90% 10%, rgba(11, 110, 49, 0.08), transparent 35%),
+                radial-gradient(circle at 10% 90%, rgba(10, 54, 157, 0.08), transparent 35%),
+                var(--bg);
+        }
+
+        .slides { position: relative; width: 100%; height: 100%; }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            padding: clamp(70px, 8vh, 95px) clamp(25px, 6vw, 90px) 95px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: scale(1.015);
+            transition: opacity .45s ease, transform .65s cubic-bezier(.2, .8, .2, 1), visibility .45s ease;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: scale(1);
+            z-index: 2;
+        }
+
+        .slide::-webkit-scrollbar { width: 6px; }
+        .slide::-webkit-scrollbar-track { background: transparent; }
+        .slide::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 20px; }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            width: min(1160px, 100%);
+            margin-inline: auto;
+        }
+
+        .brand-badge {
+            position: fixed;
+            top: 20px;
+            left: 30px;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--white);
+            border: var(--border-solid);
+            box-shadow: 3px 3px 0px var(--ink);
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-weight: 900;
+            font-size: 1.1rem;
+        }
+
+        .brand-badge img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+            border-radius: 6px;
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 24px;
+            right: 40px;
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-weight: 900;
+            z-index: 20;
+        }
+
+        .slide-number .current { color: var(--primary); font-size: 1.9rem; line-height: 1; }
+        .slide-number .separator { color: #CBD5E1; }
+        .slide-number .total { color: #94A3B8; font-size: 1rem; }
+
+        .title-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .title-icon {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            color: var(--white);
+            border-radius: 14px;
+            border: var(--border-solid);
+            box-shadow: 3px 3px 0px var(--ink);
+            background: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .title-icon.green-bg { background: var(--green); }
+        .title-icon.amber-bg { background: var(--accent); color: var(--ink); }
+
+        h2 {
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-size: clamp(1.8rem, 3.5vw, 2.7rem);
+            line-height: 1.08;
+            font-weight: 900;
+            color: var(--ink);
+        }
+
+        .title-line::after {
+            content: "";
+            display: block;
+            width: 70px;
+            height: 5px;
+            margin-top: 12px;
+            border-radius: 99px;
+            background: linear-gradient(90deg, var(--green), var(--accent));
+        }
+
+        .description {
+            max-width: 920px;
+            margin-bottom: 16px;
+            color: var(--muted);
+            font-size: clamp(0.98rem, 1.4vw, 1.1rem);
+            line-height: 1.6;
+        }
+
+        .description strong { color: var(--ink); font-weight: 700; }
+
+        .text-green { color: var(--green); }
+        .text-blue { color: var(--primary); }
+
+        .highlight {
+            position: relative;
+            max-width: 960px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin: 16px 0;
+            padding: 14px 18px;
+            color: var(--ink);
+            background: var(--primary-light);
+            border: var(--border-solid);
+            box-shadow: var(--shadow-solid);
+            border-radius: 14px;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .highlight i { color: var(--primary); font-size: 1.15rem; margin-top: 2px; }
+        .highlight.green-highlight { background: var(--green-light); }
+        .highlight.green-highlight i { color: var(--green); }
+        .highlight.amber-highlight { background: var(--accent-light); }
+        .highlight.amber-highlight i { color: #D97706; }
+
+        .grid {
+            display: grid;
+            width: 100%;
+            gap: 16px;
+            margin: 18px 0;
+        }
+
+        .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+        .card {
+            position: relative;
+            padding: 18px 16px;
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            text-align: left;
+            background: var(--white);
+            border: var(--border-solid);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-solid);
+            transition: transform var(--transition), box-shadow var(--transition);
+        }
+
+        .card:hover {
+            transform: translate(-2px, -3px);
+            box-shadow: 6px 7px 0px var(--ink);
+        }
+
+        .card-img-preview {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 2px solid var(--ink);
+            margin-bottom: 12px;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 10px;
+            color: var(--white);
+            background: var(--primary);
+            border: 2px solid var(--ink);
+            border-radius: 10px;
+            font-size: 1.05rem;
+        }
+
+        .card-icon.green { background: var(--green); }
+        .card-icon.amber { background: var(--accent); color: var(--ink); }
+        .card-icon.red { background: var(--danger); }
+
+        .card h4 {
+            margin-bottom: 6px;
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-size: 1.02rem;
+            font-weight: 800;
+            color: var(--ink);
+        }
+
+        .card p { color: var(--muted); font-size: .88rem; line-height: 1.45; }
+        .card p strong { color: var(--ink); }
+
+        /* Estilo para links da equipe */
+        .team-card {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 16px;
+            background: var(--white);
+            border: var(--border-solid);
+            border-radius: 14px;
+            box-shadow: 3px 3px 0px var(--ink);
+        }
+
+        .team-card h4 { font-family: "Bricolage Grotesque", sans-serif; font-size: 1rem; font-weight: 800; }
+        .team-card a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 10px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border: 1.5px solid var(--primary);
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .team-card a:hover { background: var(--primary); color: var(--white); }
+        .team-card span.no-link {
+            font-size: 0.8rem;
+            color: var(--muted);
+            font-style: italic;
+        }
+
+        /* Capa */
+        .cover {
+            padding: 0;
+            background: radial-gradient(circle at 20% 20%, rgba(134, 239, 172, 0.35), transparent 40%),
+                        radial-gradient(circle at 85% 80%, rgba(254, 243, 199, 0.6), transparent 45%), #FFFFFF;
+        }
+
+        .cover-content {
+            position: relative;
+            z-index: 5;
+            width: min(960px, 90%);
+            text-align: center;
+            background: var(--white);
+            border: 3px solid var(--ink);
+            box-shadow: 10px 10px 0px var(--ink);
+            border-radius: 28px;
+            padding: clamp(30px, 5vw, 50px);
+        }
+
+        .cover-logo-img {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            border-radius: 20px;
+            border: 2px solid var(--ink);
+            box-shadow: 3px 3px 0px var(--ink);
+            margin-bottom: 16px;
+        }
+
+        .cover-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 14px;
+            background: var(--green-light);
+            color: var(--green);
+            border: 2px solid var(--ink);
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .cover h1 {
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-size: clamp(3rem, 7vw, 5.4rem);
+            line-height: .95;
+            font-weight: 900;
+            color: var(--ink);
+        }
+
+        .cover h1 .peira { color: var(--accent); text-shadow: 2px 2px 0px var(--ink); }
+
+        .cover-subtitle {
+            margin-top: 16px;
+            color: var(--primary);
+            font-size: clamp(1rem, 1.8vw, 1.3rem);
+            font-weight: 800;
+        }
+
+        .cover-line {
+            width: 100px;
+            height: 5px;
+            margin: 20px auto;
+            border-radius: 99px;
+            background: linear-gradient(90deg, var(--green), var(--accent));
+        }
+
+        .cover-quote {
+            color: var(--muted);
+            font-size: 1rem;
+            max-width: 660px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Seção Divisória */
+        .section-slide {
+            padding: 40px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, #062163 100%);
+            color: var(--white);
+        }
+
+        .section-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 800px;
+        }
+
+        .section-icon {
+            width: 84px;
+            height: 84px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 20px;
+            border-radius: 22px;
+            color: var(--ink);
+            background: var(--accent);
+            border: 3px solid var(--ink);
+            box-shadow: 5px 5px 0px var(--ink);
+            font-size: 2.3rem;
+        }
+
+        .section-slide h1 {
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-size: clamp(2.4rem, 5vw, 4rem);
+            line-height: 1;
+            color: var(--white);
+            font-weight: 900;
+        }
+
+        .section-line {
+            width: 80px;
+            height: 5px;
+            margin: 20px 0;
+            border-radius: 99px;
+            background: var(--green-mint);
+        }
+
+        .section-slide p { color: #DBEAFE; font-size: 1.1rem; font-weight: 500; }
+
+        /* Tabela de Custos */
+        .cost-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: var(--white);
+            border: var(--border-solid);
+            border-radius: 14px;
+            box-shadow: var(--shadow-solid);
+            overflow: hidden;
+            margin: 14px 0;
+            font-size: 0.9rem;
+        }
+
+        .cost-table th {
+            background: var(--primary);
+            color: var(--white);
+            text-align: left;
+            padding: 11px 14px;
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-weight: 800;
+            border-bottom: var(--border-solid);
+        }
+
+        .cost-table td { padding: 10px 14px; border-bottom: 1px solid #E2E8F0; color: var(--ink); }
+        .cost-table tr:last-child td { background: var(--green-light); font-weight: 800; color: var(--green); border-bottom: none; }
+
+        /* Container de Vídeo Tela Cheia */
+        .video-container {
+            width: 100%;
+            max-width: 900px;
+            height: 440px;
+            background: var(--ink);
+            border: var(--border-solid);
+            box-shadow: var(--shadow-solid);
+            border-radius: 18px;
+            overflow: hidden;
+            margin: 15px auto;
+        }
+
+        .video-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Navegação */
+        .navigation {
+            position: fixed;
+            left: 50%;
+            bottom: 20px;
+            transform: translateX(-50%);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            background: var(--white);
+            border: var(--border-solid);
+            border-radius: 999px;
+            box-shadow: var(--shadow-solid);
+        }
+
+        .nav-btn {
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            border: 1.5px solid var(--ink);
+            border-radius: 50%;
+            color: var(--ink);
+            background: var(--bg);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .nav-btn:hover { color: var(--white); background: var(--primary); transform: translateY(-2px); }
+
+        .counter {
+            min-width: 65px;
+            text-align: center;
+            color: var(--muted);
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-weight: 800;
+            font-size: .85rem;
+        }
+
+        .progress {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 5px;
+            z-index: 110;
+            background: linear-gradient(90deg, var(--green), var(--primary), var(--accent));
+            transition: width .4s ease;
+        }
+
+        .dots {
+            position: fixed;
+            left: 50%;
+            bottom: 72px;
+            transform: translateX(-50%);
+            z-index: 90;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border: 1.5px solid var(--ink);
+            border-radius: 50%;
+            background: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .dot.active { width: 22px; border-radius: 99px; background: var(--accent); }
+
+        .keyboard-help {
+            position: fixed;
+            bottom: 24px;
+            right: 30px;
+            z-index: 50;
+            color: var(--muted);
+            font-size: .72rem;
+            font-weight: 600;
+        }
+        .keyboard-help kbd { padding: 2px 5px; border: 1.5px solid var(--ink); border-radius: 4px; background: var(--white); }
+
+        .animate { opacity: 0; transform: translateY(18px); }
+        .slide.active .animate { animation: appear .5s cubic-bezier(.2, .8, .2, 1) forwards; }
+        .slide.active .delay-1 { animation-delay: .06s; }
+        .slide.active .delay-2 { animation-delay: .12s; }
+        .slide.active .delay-3 { animation-delay: .18s; }
+        .slide.active .delay-4 { animation-delay: .24s; }
+
+        @keyframes appear { to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 900px) {
+            .grid-3, .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .keyboard-help, .dots { display: none; }
+            .video-container { height: 280px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation">
+    <!-- Logotipo Fixo no Canto Superior -->
+    <div class="brand-badge">
+        <img src="60037.jpg" alt="Logo LimPeira" onerror="this.src='60025.jpg'">
+        <span><span style="color:var(--ink)">Lim</span><span style="color:var(--accent)">Peira</span></span>
+    </div>
+
+    <div class="slides" id="slidesContainer">
+
+        <!-- SLIDE 1: CAPA -->
+        <section class="slide cover active">
+            <div class="cover-content">
+                <img src="60025.jpg" alt="LimPeira App" class="cover-logo-img animate" onerror="this.style.display='none'">
+                <div class="cover-pill animate">
+                    <i class="fa-solid fa-seedling"></i> Olimpíada Brasileira de Tecnologia (OBT)
+                </div>
+                <h1 class="animate delay-1">Lim<span class="peira">Peira</span></h1>
+                <p class="cover-subtitle animate delay-2">Zeladoria Urbana Inteligente e Cidadania Ativa</p>
+                <div class="cover-line animate delay-3"></div>
+                <p class="cover-quote animate delay-4">
+                    Conectando moradores e prefeituras para agilizar a resolução de demandas urbanas de mato alto e limpeza pública.
+                </p>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: VÍDEO DO PROJETO EM TELA CHEIA -->
+        <section class="slide content">
+            <div class="slide-number">
+                <span class="current">02</span><span class="separator">/</span><span class="total">08</span>
+            </div>
+            <div class="content-wrapper" style="text-align: center;">
+                <div class="title-row animate" style="justify-content: center;">
+                    <div class="title-icon green-bg"><i class="fa-solid fa-play"></i></div>
+                    <h2 class="title-line">Demonstração do Vídeo</h2>
+                </div>
+                <p class="description animate delay-1" style="margin: 0 auto 10px auto; text-align: center;">
+                    Assista ao pitch e demonstração em vídeo oficial do projeto LimPeira.
+                </p>
+
+                <div class="video-container animate delay-2">
+                    <iframe src="https://www.youtube.com/embed/CiHVToTzzwk" title="LimPeira Vídeo Pitch" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: O PROBLEMA -->
+        <section class="slide content">
+            <div class="slide-number">
+                <span class="current">03</span><span class="separator">/</span><span class="total">07</span> <!-- Atualizado abaixo via script -->
+            </div>
+            <div class="content-wrapper">
+                <div class="title-row animate">
+                    <div class="title-icon amber-bg"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <h2 class="title-line">O Problema nas Cidades</h2>
+                </div>
+                <p class="description animate delay-1">
+                    O crescimento descontrolado da vegetação em espaços públicos afeta diretamente a segurança e a saúde da população.
+                </p>
+
+                <div class="grid grid-3 animate delay-2">
+                    <div class="card">
+                        <div class="card-icon red"><i class="fa-solid fa-bug"></i></div>
+                        <h4>Saúde & Zoonoses</h4>
+                        <p>Mato alto favorece a proliferação de <strong>escorpiões, insetos e vetores da dengue</strong> perto de residências.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon amber"><i class="fa-solid fa-shield-halved"></i></div>
+                        <h4>Insegurança Urbana</h4>
+                        <p>Calçadas obstruídas forçam pedestres a caminharem pela rua e reduzem a visibilidade em esquinas.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon"><i class="fa-solid fa-phone-slash"></i></div>
+                        <h4>Ouvidorias Lentas</h4>
+                        <p>Canais tradicionais são burocráticos e desestimulam o cidadão a reportar problemas do bairro.</p>
+                    </div>
+                </div>
+
+                <div class="highlight amber-highlight animate delay-3">
+                    <i class="fa-solid fa-lightbulb"></i>
+                    <div><strong>Oportunidade:</strong> Capacitar o cidadão com ferramentas digitais para relatar o problema em segundos.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: A SOLUÇÃO (COM TELAS DO APP) -->
+        <section class="slide content">
+            <div class="slide-number">
+                <span class="current">04</span><span class="separator">/</span><span class="total">08</span>
+            </div>
+            <div class="content-wrapper">
+                <div class="title-row animate">
+                    <div class="title-icon green-bg"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                    <h2 class="title-line">A Solução: <span class="text-green">App LimPeira</span></h2>
+                </div>
+                <p class="description animate delay-1">
+                    Veja o aplicativo em funcionamento real, projetado para uso imediato sem barreiras de cadastro.
+                </p>
+
+                <div class="grid grid-3 animate delay-2">
+                    <div class="card">
+                        <img src="60025.jpg" alt="Home App" class="card-img-preview" onerror="this.style.display='none'">
+                        <h4>Entrada sem Fricção</h4>
+                        <p>Login rápido com apelido ou gerador aleatório (ex: <em>Relâmpago Gelado</em>)[span_0](start_span)[span_0](end_span)[span_1](start_span)[span_1](end_span).</p>
+                    </div>
+                    <div class="card">
+                        <img src="60023.jpg" alt="Mapa App" class="card-img-preview" onerror="this.style.display='none'">
+                        <h4>Mapa Georreferenciado</h4>
+                        <p>Visualização de todos os relatos da comunidade diretamente no mapa interativo[span_2](start_span)[span_2](end_span).</p>
+                    </div>
+                    <div class="card">
+                        <img src="60027.jpg" alt="Relato App" class="card-img-preview" onerror="this.style.display='none'">
+                        <h4>Envio de Protocolo</h4>
+                        <p>Foto, GPS automático, nível de urgência e acompanhamento de status em tempo real[span_3](start_span)[span_3](end_span)[span_4](start_span)[span_4](end_span)[span_5](start_span)[span_5](end_span).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: ARQUITETURA E REFATORAÇÃO -->
+        <section class="slide content">
+            <div class="slide-number">
+                <span class="current">05</span><span class="separator">/</span><span class="total">08</span>
+            </div>
+            <div class="content-wrapper">
+                <div class="title-row animate">
+                    <div class="title-icon"><i class="fa-solid fa-code-branch"></i></div>
+                    <h2 class="title-line">Nova Stack e Refatoração</h2>
+                </div>
+                <p class="description animate delay-1">
+                    Para levar o LimPeira da fase de protótipo acadêmico para produção em larga escala municipal, reestruturaremos a tecnologia.
+                </p>
+
+                <div class="grid grid-3 animate delay-2">
+                    <div class="card">
+                        <div class="card-icon"><i class="fa-brands fa-flutter"></i></div>
+                        <h4>Front-end em Flutter</h4>
+                        <p>Aplicativo nativo de alta performance para <strong>Android e iOS</strong> com código unificado.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon green"><i class="fa-solid fa-server"></i></div>
+                        <h4>Back-end Robusto</h4>
+                        <p>Node.js e banco de dados PostgreSQL com extensão geográfica para gestão de chamados municipais.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon amber"><i class="fa-solid fa-building-columns"></i></div>
+                        <h4>Painel B2G</h4>
+                        <p>Dashboard administrativo para prefeituras priorizarem equipes de capina e zeladoria urbana.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: ORÇAMENTO E INFRAESTRUTURA -->
+        <section class="slide content">
+            <div class="slide-number">
+                <span class="current">06</span><span class="separator">/</span><span class="total">08</span>
+            </div>
+            <div class="content-wrapper">
+                <div class="title-row animate">
+                    <div class="title-icon green-bg"><i class="fa-solid fa-coins"></i></div>
+                    <h2 class="title-line">Orçamento & Custos</h2>
+                </div>
+                <p class="description animate delay-1">
+                    Planejamento financeiro transparente para cobrir servidores, licenças de lojas e infraestrutura em nuvem no primeiro ano.
+                </p>
+
+                <table class="cost-table animate delay-2">
+                    <thead>
+                        <tr>
+                            <th>Item / Serviço</th>
+                            <th>Finalidade</th>
+                            <th>Tipo</th>
+                            <th>Estimativa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Servidor VPS + Armazenamento</strong></td>
+                            <td>Hospedagem de API, banco de dados e fotos dos relatos</td>
+                            <td>Mensal</td>
+                            <td>R$ 180 – R$ 350/mês</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Google Play Console</strong></td>
+                            <td>Conta oficial de desenvolvedor Android</td>
+                            <td>Taxa Única</td>
+                            <td>US$ 25 (~R$ 145)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Apple Developer Program</strong></td>
+                            <td>Conta oficial para publicação na App Store (iOS)</td>
+                            <td>Anual</td>
+                            <td>US$ 99 (~R$ 570/ano)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>API de Mapas & Domínio</strong></td>
+                            <td>Geocodificação de endereços e painel web</td>
+                            <td>Anual/Mensal</td>
+                            <td>R$ 200/ano</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><strong>Custo Operacional Total Estimado (Primeiro Ano)</strong></td>
+                            <td><strong>~R$ 3.500 a R$ 5.500 / ano</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: MODELO DE NEGÓCIO -->
+        <section class="slide content">
+            <div class="slide-number">
+                <span class="current">07</span><span class="separator">/</span><span class="total">08</span>
+            </div>
+            <div class="content-wrapper">
+                <div class="title-row animate">
+                    <div class="title-icon amber-bg"><i class="fa-solid fa-handshake"></i></div>
+                    <h2 class="title-line">Modelo de Negócio & Pedido</h2>
+                </div>
+                <p class="description animate delay-1">
+                    Como o projeto se sustenta financeiramente e gera valor para a administração pública.
+                </p>
+
+                <div class="grid grid-2 animate delay-2">
+                    <div class="card">
+                        <div class="card-icon green"><i class="fa-solid fa-chart-line"></i></div>
+                        <h4>SaaS B2G (Governo)</h4>
+                        <p>Licenciamento do software para prefeituras como canal oficial de ouvidoria de zeladoria, reduzindo custos operacionais de fiscalização.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon"><i class="fa-solid fa-rocket"></i></div>
+                        <h4>Próximos Passos</h4>
+                        <p>Buscamos aprovação e investimento inicial para refatorar o app, cobrir taxas de publicação nas lojas e iniciar piloto oficial em Limeira.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 8: EQUIPE E LINKEDINS -->
+        <section class="slide content">
+            <div class="slide-number">
+                <span class="current">08</span><span class="separator">/</span><span class="total">08</span>
+            </div>
+            <div class="content-wrapper">
+                <div class="title-row animate">
+                    <div class="title-icon"><i class="fa-solid fa-users"></i></div>
+                    <h2 class="title-line">Equipe do Projeto</h2>
+                </div>
+                <p class="description animate delay-1">
+                    Conheça os autores e desenvolvedores responsáveis pelo LimPeira[span_6](start_span)[span_6](end_span).
+                </p>
+
+                <div class="grid grid-3 animate delay-2">
+                    <div class="team-card">
+                        <h4>Carlos Eduardo</h4>
+                        <a href="https://www.linkedin.com/in/carlos-eduardo-rodrigues-da-silva-a05bb2419?trk=contact-info" target="_blank">
+                            <i class="fa-brands fa-linkedin"></i> LinkedIn
+                        </a>
+                    </div>
+                    <div class="team-card">
+                        <h4>Vitor Moreira</h4>
+                        <a href="https://www.linkedin.com/in/vitor-moreira-572b7b279" target="_blank">
+                            <i class="fa-brands fa-linkedin"></i> LinkedIn
+                        </a>
+                    </div>
+                    <div class="team-card">
+                        <h4>Richard Hupel</h4>
+                        <a href="https://linkedin.com/in/richard-hupel-718937310" target="_blank">
+                            <i class="fa-brands fa-linkedin"></i> LinkedIn
+                        </a>
+                    </div>
+                    <div class="team-card">
+                        <h4>Sara Barbosa</h4>
+                        <span class="no-link">Equipe de Desenvolvimento</span>
+                    </div>
+                    <div class="team-card">
+                        <h4>Natália Miguel</h4>
+                        <span class="no-link">Equipe de Desenvolvimento</span>
+                    </div>
+                    <div class="team-card">
+                        <h4>Kaique</h4>
+                        <span class="no-link">Equipe de Desenvolvimento</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Indicadores -->
+    <div class="dots" id="dotsContainer"></div>
+
+    <!-- Navegação Inferior -->
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn" title="Anterior"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="counter"><span class="counter-current" id="navCurrent">01</span> / <span id="navTotal">08</span></div>
+        <button class="nav-btn" id="nextBtn" title="Próximo"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+
+    <div class="keyboard-help">Use <kbd>←</kbd> <kbd>→</kbd> para navegar</div>
+    <div class="progress" id="progressBar"></div>
+</div>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const navCurrent = document.getElementById('navCurrent');
+    const navTotal = document.getElementById('navTotal');
+    const progressBar = document.getElementById('progressBar');
+    const dotsContainer = document.getElementById('dotsContainer');
+
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+    navTotal.textContent = String(totalSlides).padStart(2, '0');
+
+    slides.forEach((_, idx) => {
+        const dot = document.createElement('button');
+        dot.classList.add('dot');
+        if (idx === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => goToSlide(idx));
+        dotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+
+    function updatePresentation() {
+        slides.forEach((slide, index) => {
+            slide.classList.toggle('active', index === currentIndex);
+        });
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentIndex);
+        });
+        navCurrent.textContent = String(currentIndex + 1).padStart(2, '0');
+        progressBar.style.width = `${((currentIndex + 1) / totalSlides) * 100}%`;
+    }
+
+    function goToSlide(index) {
+        if (index < 0) index = 0;
+        if (index >= totalSlides) index = totalSlides - 1;
+        currentIndex = index;
+        updatePresentation();
+    }
+
+    prevBtn.addEventListener('click', () => goToSlide(currentIndex - 1));
+    nextBtn.addEventListener('click', () => goToSlide(currentIndex + 1));
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+            e.preventDefault();
+            goToSlide(currentIndex + 1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+            e.preventDefault();
+            goToSlide(currentIndex - 1);
+        }
+    });
+
+    updatePresentation();
+</script>
+
+</body>
+</html>
